@@ -17,7 +17,7 @@ To use this script as an app you must do the following, after opening this link:
 _If you have any comments, questions, or whatever, contact me at elisaurrejola16@gmail.com_
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
-[SPANISH]
+[ESPAÑOL]
 Para usar este script como una aplicación, deberás hacer lo siguiente, luego de entrar a este link: https://elisaurrejola16.github.io/algae-tracker/
 
 ## Celulares
