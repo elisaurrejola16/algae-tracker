@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlgaeTracker</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQWxnYWVUcmFja2VyIiwic2hvcnRfbmFtZSI6IkFsZ2FlVHJhY2tlciIsImRlc2NyaXB0aW9uIjoiU2VndWltaWVudG8gZGUgY3VsdGl2b3MgZGUgYWxnYXMgeSBiaW9ycmVhY3RvcmVzIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNlZWYxZjUiLCJ0aGVtZV9jb2xvciI6IiMwZjFjMmUiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFNQUFBQURBQ0FZQUFBQlMzR3dIQUFBRXFFbEVRVlI0bk8zZFRYTFRTaGlHVVRuRkhJWjNrQUVMb0ZqRlhSQURsbkdYeENwU0xJQkJCZ3pKQ21Cd0NaaGd5L3JwVmt2OW5yT0F1Slg2SG5WYmRpV25ZV2RlMzcvLzNub04xUFAwK0hCcXZZWnpUUmRqMkJtR3RsRnMvc0tHbmpGYng3RFppeGw4NXRncWhPb3ZZdkJabzNZSTFYNjR3YWVrV2lFVS82RUduNXBLaDNCWDhvY1pmbW9yUFdORmFqTDR0RkJpTjFpOUF4aCtXaWt4ZTZzQ01QeTB0bllHRndkZytObUxOYk80S0FERHo5NHNuY25aQVJoKzltckpiTTRLd1BDemQzTm5kSElBaHAram1ET3Jrd0l3L0J6TjFKbTlHWURoNTZpbXpHN1JyMExBMFl3RzRPN1AwZDJhNGFzQkdINTZNVGJMamtCRXV4aUF1eis5dVRiVGRnQ2kvUldBdXorOXVqVGJkZ0NpL1JHQXV6Kzllem5qZGdDaS9RckEzWjhVNTdOdUJ5Q2FBSWgyTnd5T1ArUjVubms3QU5FRVFEUUJFRTBBUkR0NUEwd3lPd0RSQkVBMEFSQk5BRVFUQU5FRVFEUUJFRTBBUkJNQTBRUkFOQUVRVFFCRUV3RFJYclZlUUMvZS92ZnY1cS81NWVPbnpWK3pOM2FBQWxvTWY4dlg3WWtBaUNZQW9nbUFhQUlnbWdDSUpnQ2lDWUJvQWlDYUFBcG85WW1zVDRMWDg0ZXhLaW45S2ExaHI4TU9RRFFCRUUwQVJCTUEwUVJBTkFFUVRRQkVFd0RSQkVBMEFSQk5BRVFUQU5FRVFEUUJFRTBBUkJNQTBRUkFOQUVRVFFCRUV3RFJCRUEwQVJCTkFFUVRBTkVFUURRQkVNMmZScHhwNy8rWXpwOVFuTWNPUURRQnpMRDN1Lzh3SEdPTmV5SUFvZ21BYUFJZ21nQW1PdExaK2tocmJVMEFSQk1BMFFSQU5BRk1jTVF6OVJIWDNJSUFpQ1lBb2dtQWFBSzQ0Y2huNlNPdmZTc0NJSm9BaVBhcTlRTDI3dHZqMTlaTG9DSTd3SWdlenRBOVhFTk5BaGpSdzkyL2gydW9TUUJFRXdEUkJIQkZUMmZubnE2bE5BRmMwZFBadWFkcktVMEFSQk1BMFFSd1FZOW41aDZ2cVFRQlhORGptYm5IYXlwQkFFUVR3QXM5SHhWNnZyYWxCUEJDejBlRm5xOXRLUUVRVFFCRUU4Q1poRE55d2pYT0lZQXpDV2ZraEd1Y1F3QkVFd0RSQlBCVDB0azQ2VnB2RWNCUFNXZmpwR3U5UlFCRUV3RFJCREFNdzVzUDcxb3ZZWE9KMTN5SkFJZ21BS0lKZ0dqeEFTU2ZoWk92L1ZsOEFHUVRBTkdpQS9DVkFMK0Q2QUI4SmNEdklEb0FpUDRQTVcvdS8ybTloRjM0Tm54dXZZUm1vbmVBTHg4L3RWNUNjK20vZytnQWhpRjdBSkt2L2RucDlmMzc3NjBYc1JjcFQwUU0vbS94TzhDNWhNRkl1TVk1N0FBamV0a1JEUDExQXBqb2FERVkrbWtFc01KZW9qRHN5d21na3RKeEdQSTZCRUEwVDRHSUpnQ2lDWUJvQWlDYUFJZ21BS0lKZ0doM1Q0OFBwOWFMZ0JhZUhoOU9kZ0NpQ1lCb0FpQ2FBSWgyTnd6L3Z4bG92UkRZMHZQTTJ3R0lKZ0NpL1FyQU1ZZ1U1N051QnlEYUh3SFlCZWpkeXhtM0F4RHRyd0RzQXZUcTBtemJBWWgyTVFDN0FMMjVOdE4yQUtKZERjQXVRQy9HWm5sMEJ4QUJSM2RyaGgyQmlIWXpBTHNBUnpWbGRpZnRBQ0xnYUtiTzdPUWprQWc0aWptek91czlnQWpZdTdrek92dE5zQWpZcXlXenVlZ3BrQWpZbTZVenVmZ3hxQWpZaXpXenVPcHpBQkhRMnRvWlhQMUJtQWhvcGNUc0ZSMWUvMitNTFpTODZSYjlLb1RkZ05wS3oxaTFnYlViVUZLdG0ydjFPN1lRV0tQMnFXS3pJNHNRbUdPcjQvVG1aM1loTUdicjk1Rk4zN1NLZ1dGbysvQmtkMDl0Uk5HM3ZUMHAvQUhJZWtPaWMzdW5GQUFBQUFCSlJVNUVya0pnZ2c9PSIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9wbmciLCJwdXJwb3NlIjoiYW55In1dfQ==">
+<meta name="theme-color" content="#0f1c2e">
+<link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEqElEQVR4nO3dTXLTShiGUTnFHIZ3kAELoFjFXRADlnGXxCpSLIBBBgzJCmBwCZhgy/rpVkv9nrOAuJX6HnVbdiWnYWde37//3noN1PP0+HBqvYZzTRdj2BmGtlFs/sKGnjFbx7DZixl85tgqhOovYvBZo3YI1X64waekWiEU/6EGn5pKh3BX8ocZfmorPWNFajL4tFBiN1i9Axh+Wikxe6sCMPy0tnYGFwdg+NmLNbO4KADDz94sncnZARh+9mrJbM4KwPCzd3NndHIAhp+jmDOrkwIw/BzN1Jm9GYDh56imzG7Rr0LA0YwG4O7P0d2a4asBGH56MTbLjkBEuxiAuz+9uTbTdgCi/RWAuz+9ujTbdgCi/RGAuz+9eznjdgCi/QrA3Z8U57NuByCaAIh2NwyOP+R5nnk7ANEEQDQBEE0ARDt5A0wyOwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRXrVeQC/e/vfv5q/55eOnzV+zN3aAAloMf8vX7YkAiCYAogmAaAIgmgCIJgCiCYBoAiCaAApo9YmsT4LX84exKin9Ka1hr8MOQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEM2fRpxp7/+Yzp9QnMcOQDQBzLD3u/8wHGONeyIAogmAaAIgmgAmOtLZ+khrbU0ARBMA0QRANAFMcMQz9RHX3IIAiCYAogmAaAK44chn6SOvfSsCIJoAiPaq9QL27tvj19ZLoCI7wIgeztA9XENNAhjRw92/h2uoSQBEEwDRBHBFT2fnnq6lNAFc0dPZuadrKU0ARBMA0QRwQY9n5h6vqQQBXNDjmbnHaypBAEQTwAs9HxV6vralBPBCz0eFnq9tKQEQTQBEE8CZhDNywjXOIYAzCWfkhGucQwBEEwDRBPBT0tk46VpvEcBPSWfjpGu9RQBEEwDRBDAMw5sP71ovYXOJ13yJAIgmAKIJgGjxASSfhZOv/Vl8AGQTANGiA/CVAL+D6AB8JcDvIDoAiP4PMW/u/2m9hF34NnxuvYRmoneALx8/tV5Cc+m/g+gAhiF7AJKv/dnp9f37760XsRcpT0QM/m/xO8C5hMFIuMY57AAjetkRDP11ApjoaDEY+mkEsMJeojDsywmgktJxGPI6BEA0T4GIJgCiCYBoAiCaAIgmAKIJgGh3T48Pp9aLgBaeHh9OdgCiCYBoAiCaAIh2Nwz/vxlovRDY0vPM2wGIJgCi/QrAMYgU57NuByDaHwHYBejdyxm3AxDtrwDsAvTq0mzbAYh2MQC7AL25NtN2AKJdDcAuQC/GZnl0BxABR3drhh2BiHYzALsARzVldiftACLgaKbO7OQjkAg4ijmzOus9gAjYu7kzOvtNsAjYqyWzuegpkAjYm6UzufgxqAjYizWzuOpzABHQ2toZXP1BmAhopcTsFR1e/2+MLZS86Rb9KoTdgNpKz1i1gbUbUFKtm2v1O7YQWKP2qWKzI4sQmGOr4/TmZ3YhMGbr95FN37SKgWFo+/Bkd09tRNG3vT0p/AHIekOic3unFAAAAABJRU5ErkJggg==">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEqElEQVR4nO3dTXLTShiGUTnFHIZ3kAELoFjFXRADlnGXxCpSLIBBBgzJCmBwCZhgy/rpVkv9nrOAuJX6HnVbdiWnYWde37//3noN1PP0+HBqvYZzTRdj2BmGtlFs/sKGnjFbx7DZixl85tgqhOovYvBZo3YI1X64waekWiEU/6EGn5pKh3BX8ocZfmorPWNFajL4tFBiN1i9Axh+Wikxe6sCMPy0tnYGFwdg+NmLNbO4KADDz94sncnZARh+9mrJbM4KwPCzd3NndHIAhp+jmDOrkwIw/BzN1Jm9GYDh56imzG7Rr0LA0YwG4O7P0d2a4asBGH56MTbLjkBEuxiAuz+9uTbTdgCi/RWAuz+9ujTbdgCi/RGAuz+9eznjdgCi/QrA3Z8U57NuByCaAIh2NwyOP+R5nnk7ANEEQDQBEE0ARDt5A0wyOwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRXrVeQC/e/vfv5q/55eOnzV+zN3aAAloMf8vX7YkAiCYAogmAaAIgmgCIJgCiCYBoAiCaAApo9YmsT4LX84exKin9Ka1hr8MOQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEM2fRpxp7/+Yzp9QnMcOQDQBzLD3u/8wHGONeyIAogmAaAIgmgAmOtLZ+khrbU0ARBMA0QRANAFMcMQz9RHX3IIAiCYAogmAaAK44chn6SOvfSsCIJoAiPaq9QL27tvj19ZLoCI7wIgeztA9XENNAhjRw92/h2uoSQBEEwDRBHBFT2fnnq6lNAFc0dPZuadrKU0ARBMA0QRwQY9n5h6vqQQBXNDjmbnHaypBAEQTwAs9HxV6vralBPBCz0eFnq9tKQEQTQBEE8CZhDNywjXOIYAzCWfkhGucQwBEEwDRBPBT0tk46VpvEcBPSWfjpGu9RQBEEwDRBDAMw5sP71ovYXOJ13yJAIgmAKIJgGjxASSfhZOv/Vl8AGQTANGiA/CVAL+D6AB8JcDvIDoAiP4PMW/u/2m9hF34NnxuvYRmoneALx8/tV5Cc+m/g+gAhiF7AJKv/dnp9f37760XsRcpT0QM/m/xO8C5hMFIuMY57AAjetkRDP11ApjoaDEY+mkEsMJeojDsywmgktJxGPI6BEA0T4GIJgCiCYBoAiCaAIgmAKIJgGh3T48Pp9aLgBaeHh9OdgCiCYBoAiCaAIh2Nwz/vxlovRDY0vPM2wGIJgCi/QrAMYgU57NuByDaHwHYBejdyxm3AxDtrwDsAvTq0mzbAYh2MQC7AL25NtN2AKJdDcAuQC/GZnl0BxABR3drhh2BiHYzALsARzVldiftACLgaKbO7OQjkAg4ijmzOus9gAjYu7kzOvtNsAjYqyWzuegpkAjYm6UzufgxqAjYizWzuOpzABHQ2toZXP1BmAhopcTsFR1e/2+MLZS86Rb9KoTdgNpKz1i1gbUbUFKtm2v1O7YQWKP2qWKzI4sQmGOr4/TmZ3YhMGbr95FN37SKgWFo+/Bkd09tRNG3vT0p/AHIekOic3unFAAAAABJRU5ErkJggg==">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AlgaeTracker">
+
+<style>
+  :root{
+    --navy:#0f1c2e;
+    --navy-2:#16283f;
+    --green:#1f8c5a;
+    --green-dark:#17714a;
+    --green-light:#2fa872;
+    --bg:#eef1f5;
+    --card:#ffffff;
+    --text:#1c2733;
+    --muted:#66768a;
+    --border:#e3e7ed;
+    --danger:#c0392b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
+  .app{
+    display:flex;
+    min-height:100vh;
+  }
+  .sidebar{
+    width:260px;
+    flex-shrink:0;
+    background:var(--navy);
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    padding:24px 18px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:700;
+    margin-bottom:28px;
+    padding:0 6px;
+  }
+  .brand svg{flex-shrink:0;}
+  nav{display:flex;flex-direction:column;gap:4px;}
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:10px;
+    color:#c9d3e0;
+    cursor:pointer;
+    font-size:14.5px;
+    font-weight:500;
+    background:transparent;
+    border:none;
+    text-align:left;
+    width:100%;
+  }
+  .nav-item:hover{background:var(--navy-2);color:#fff;}
+  .nav-item.active{background:var(--green);color:#fff;}
+  .nav-item svg{flex-shrink:0;}
+  .sidebar-footer{
+    margin-top:auto;
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,0.08);
+  }
+  .sidebar-footer label{
+    display:block;
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:#8494a8;
+    margin-bottom:8px;
+  }
+  select#loteSelector{
+    width:100%;
+    background:var(--navy-2);
+    color:#fff;
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:8px;
+    padding:10px 10px;
+    font-size:14px;
+  }
+  .main{
+    flex:1;
+    padding:32px 40px;
+    overflow-y:auto;
+  }
+  .card{
+    background:var(--card);
+    border-radius:16px;
+    padding:28px 32px;
+    box-shadow:0 1px 3px rgba(20,30,50,0.06);
+  }
+  .view{display:none;}
+  .view.active{display:block;}
+  .header-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:20px;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  h1{font-size:24px;margin:0 0 4px 0;}
+  h2{font-size:20px;margin:0 0 4px 0;}
+  .subtitle{color:var(--muted);font-size:14.5px;}
+  .subtitle b{color:var(--green-dark);font-style:italic;}
+  .pill{
+    background:var(--bg);
+    border-radius:10px;
+    padding:10px 16px;
+    font-size:13.5px;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .empty-state{
+    text-align:center;
+    padding:56px 20px;
+  }
+  .empty-state svg{margin-bottom:16px;color:#c7d0dc;}
+  .empty-state h3{font-size:17px;margin:0 0 8px 0;}
+  .empty-state p{color:var(--muted);font-size:14.5px;max-width:420px;margin:0 auto 20px auto;line-height:1.5;}
+  .btn{
+    background:var(--green);
+    color:#fff;
+    border:none;
+    padding:12px 22px;
+    border-radius:9px;
+    font-size:14.5px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .btn:hover{background:var(--green-dark);}
+  .btn.secondary{
+    background:var(--bg);
+    color:var(--text);
+  }
+  .btn.secondary:hover{background:#e2e6ec;}
+  .btn.danger{background:#fbeae8;color:var(--danger);}
+  .btn.danger:hover{background:#f5d5d1;}
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:14px;
+    margin-bottom:24px;
+  }
+  .stat{
+    background:var(--bg);
+    border-radius:12px;
+    padding:16px 18px;
+  }
+  .stat .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
+  .stat .value{font-size:22px;font-weight:700;}
+  .stat .value span{font-size:13px;font-weight:500;color:var(--muted);}
+  .chart-wrap{margin-top:8px;}
+  .chart-wrap .chart-title{font-size:13.5px;font-weight:600;color:var(--muted);margin-bottom:10px;}
+  form{max-width:560px;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .field{margin-bottom:16px;display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:13.5px;font-weight:600;color:var(--text);}
+  .field .hint{font-size:12px;color:var(--muted);font-weight:400;}
+  input,select,textarea{
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:10px 12px;
+    font-size:14.5px;
+    font-family:inherit;
+    background:#fff;
+    color:var(--text);
+  }
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--green-light);outline-offset:1px;}
+  textarea{resize:vertical;min-height:70px;}
+  .form-actions{display:flex;gap:10px;margin-top:8px;}
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  th{
+    text-align:left;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    color:var(--muted);
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+  }
+  td{padding:12px;border-bottom:1px solid var(--border);}
+  tr:last-child td{border-bottom:none;}
+  .badge-del{
+    color:var(--danger);
+    background:#fbeae8;
+    border:none;
+    border-radius:7px;
+    padding:6px 10px;
+    font-size:12.5px;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .badge-del:hover{background:#f5d5d1;}
+  .lote-list{margin-top:28px;}
+  .lote-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 16px;
+    background:var(--bg);
+    border-radius:10px;
+    margin-bottom:8px;
+  }
+  .lote-row .info b{display:block;font-size:14.5px;}
+  .lote-row .info span{font-size:12.5px;color:var(--muted);}
+  .toast{
+    position:fixed;
+    bottom:24px;
+    right:24px;
+    background:var(--navy);
+    color:#fff;
+    padding:14px 20px;
+    border-radius:10px;
+    font-size:14px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.2);
+    opacity:0;
+    transform:translateY(8px);
+    transition:all .25s ease;
+    pointer-events:none;
+    z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateY(0);}
+  .report-block{margin-bottom:22px;}
+  .report-block h4{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin:0 0 10px 0;}
+  .report-text{
+    background:var(--bg);
+    border-radius:10px;
+    padding:16px 18px;
+    font-size:14px;
+    line-height:1.7;
+    white-space:pre-wrap;
+  }
+  @media(max-width:760px){
+    .app{flex-direction:column;}
+    .sidebar{width:100%;}
+    .main{padding:20px;}
+    .form-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2fa872" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6.5L4.5 19a1.5 1.5 0 0 0 1.3 2.3h12.4A1.5 1.5 0 0 0 19.5 19L14 9.5V3"/><path d="M7 15h10"/></svg>
+      AlgaeTracker
+    </div>
+    <nav>
+      <button class="nav-item active" data-view="panel">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Panel de Control
+      </button>
+      <button class="nav-item" data-view="ingresar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        Ingresar Datos
+      </button>
+      <button class="nav-item" data-view="nuevo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2h6M10 2v7l-5.2 9.2A1.5 1.5 0 0 0 6.1 21h11.8a1.5 1.5 0 0 0 1.3-2.3L14 9V2"/></svg>
+        Nuevo Lote
+      </button>
+      <button class="nav-item" data-view="historial">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        Historial
+      </button>
+      <button class="nav-item" data-view="informe">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>
+        Informe Ejecutivo
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <label>Experimento activo</label>
+      <select id="loteSelector"></select>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- PANEL DE CONTROL -->
+    <section class="view active" id="view-panel">
+      <div class="card">
+        <div class="header-row">
+          <div>
+            <h1 id="panelTitulo">Panel de Control</h1>
+            <div class="subtitle">Especie cultivada: <b id="panelEspecie">-</b></div>
+          </div>
+          <div class="pill">Fecha de Inicio: <b id="panelFecha">-</b></div>
+        </div>
+
+        <div id="panelConDatos" style="display:none;">
+          <div class="stats-grid" id="statsGrid"></div>
+          <div class="chart-wrap">
+            <div class="chart-title">Densidad óptica (OD) a lo largo del tiempo</div>
+            <canvas id="chartCanvas" height="220"></canvas>
+          </div>
+        </div>
+
+        <div id="panelSinDatos" class="empty-state">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c7d0dc" stroke-width="2"><path d="M3 12h4l2 6 4-14 2 8h6"/></svg>
+          <h3>No hay datos registrados aún</h3>
+          <p>Este lote no contiene mediciones de cultivo. Dirígete a la sección "Ingresar Datos" para registrar los primeros parámetros del biorreactor.</p>
+          <button class="btn" onclick="goTo('ingresar')">Ingresar Primer Registro</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- INGRESAR DATOS -->
+    <section class="view" id="view-ingresar">
+      <div class="card">
+        <h2>Ingresar Datos</h2>
+        <div class="subtitle" style="margin-bottom:20px;">Registrar una nueva medición para <b id="ingresarLoteNombre">-</b></div>
+        <form id="formDatos">
+          <div class="form-grid">
+            <div class="field">
+              <label>Fecha</label>
+              <input type="date" id="fFecha" required>
+            </div>
+            <div class="field">
+              <label>pH</label>
+              <input type="number" step="0.01" id="fPh" placeholder="ej. 8.2" required>
+            </div>
+            <div class="field">
+              <label>Temperatura (°C)</label>
+              <input type="number" step="0.1" id="fTemp" placeholder="ej. 24.5" required>
+            </div>
+            <div class="field">
+              <label>Densidad Óptica (OD680)</label>
+              <input type="number" step="0.001" id="fOd" placeholder="ej. 0.450" required>
+            </div>
+            <div class="field">
+              <label>Salinidad (ppt) <span class="hint">opcional</span></label>
+              <input type="number" step="0.1" id="fSal" placeholder="ej. 32">
+            </div>
+            <div class="field">
+              <label>Oxígeno disuelto (mg/L) <span class="hint">opcional</span></label>
+              <input type="number" step="0.1" id="fO2" placeholder="ej. 6.8">
+            </div>
+          </div>
+          <div class="field">
+            <label>Notas <span class="hint">opcional</span></label>
+            <textarea id="fNotas" placeholder="Observaciones sobre el cultivo..."></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn">Guardar Registro</button>
+            <button type="button" class="btn secondary" onclick="goTo('panel')">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- NUEVO LOTE -->
+    <section class="view" id="view-nuevo">
+      <div class="card">
+        <h2>Nuevo Lote</h2>
+        <div class="subtitle" style="margin-bottom:20px;">Crea un nuevo experimento de cultivo</div>
+        <form id="formLote">
+          <div class="field">
+            <label>Nombre del lote</label>
+            <input type="text" id="lNombre" placeholder="ej. Lote B - Invernadero 2" required>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label>Especie cultivada</label>
+              <input type="text" id="lEspecie" placeholder="ej. Nannochloropsis oceanica" required>
+            </div>
+            <div class="field">
+              <label>Fecha de inicio</label>
+              <input type="date" id="lFecha" required>
+            </div>
+          </div>
+          <div class="field">
+            <label>Volumen inicial (L) <span class="hint">opcional</span></label>
+            <input type="number" step="0.1" id="lVolumen" placeholder="ej. 20">
+          </div>
+          <div class="field">
+            <label>Notas <span class="hint">opcional</span></label>
+            <textarea id="lNotas" placeholder="Condiciones iniciales, objetivo del experimento..."></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn">Crear Lote</button>
+          </div>
+        </form>
+
+        <div class="lote-list" id="loteList"></div>
+      </div>
+    </section>
+
+    <!-- HISTORIAL -->
+    <section class="view" id="view-historial">
+      <div class="card">
+        <div class="header-row">
+          <h2>Historial</h2>
+        </div>
+        <div id="historialConDatos">
+          <table>
+            <thead>
+              <tr><th>Fecha</th><th>pH</th><th>Temp (°C)</th><th>OD680</th><th>Salinidad</th><th>O₂ disuelto</th><th>Notas</th><th></th></tr>
+            </thead>
+            <tbody id="historialBody"></tbody>
+          </table>
+        </div>
+        <div id="historialSinDatos" class="empty-state" style="display:none;">
+          <p>Aún no hay mediciones registradas para este lote.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- INFORME EJECUTIVO -->
+    <section class="view" id="view-informe">
+      <div class="card">
+        <div class="header-row">
+          <h2>Informe Ejecutivo</h2>
+          <button class="btn secondary" onclick="descargarInforme()">Descargar (.txt)</button>
+        </div>
+        <div id="informeContenido"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'algaeTrackerData';
+
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+function loadData(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(raw){
+    try{ return JSON.parse(raw); }catch(e){ /* fallthrough */ }
+  }
+  const seed = {
+    loteActivoId: 'lote-inicial',
+    lotes: [
+      {
+        id:'lote-inicial',
+        nombre:'Lote Inicial',
+        especie:'Nannochloropsis oceanica',
+        fechaInicio: todayStr(),
+        volumen:'',
+        notas:'',
+        entradas:[]
+      }
+    ]
+  };
+  saveData(seed);
+  return seed;
+}
+
+function saveData(data){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+let DATA = loadData();
+
+function getLoteActivo(){
+  return DATA.lotes.find(l => l.id === DATA.loteActivoId) || DATA.lotes[0];
+}
+
+function uid(prefix){
+  return prefix + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._tm);
+  showToast._tm = setTimeout(()=> t.classList.remove('show'), 2200);
+}
+
+// ---------- Navigation ----------
+function goTo(view){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  renderAll();
+}
+
+document.querySelectorAll('.nav-item').forEach(btn=>{
+  btn.addEventListener('click', ()=> goTo(btn.dataset.view));
+});
+
+// ---------- Lote selector ----------
+function renderLoteSelector(){
+  const sel = document.getElementById('loteSelector');
+  sel.innerHTML = '';
+  DATA.lotes.forEach(l=>{
+    const opt = document.createElement('option');
+    opt.value = l.id;
+    opt.textContent = l.nombre;
+    if(l.id === DATA.loteActivoId) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+document.getElementById('loteSelector').addEventListener('change', (e)=>{
+  DATA.loteActivoId = e.target.value;
+  saveData(DATA);
+  renderAll();
+});
+
+// ---------- Panel de Control ----------
+function renderPanel(){
+  const lote = getLoteActivo();
+  if(!lote) return;
+  document.getElementById('panelTitulo').textContent = 'Panel de Control: ' + lote.nombre;
+  document.getElementById('panelEspecie').textContent = lote.especie || '-';
+  document.getElementById('panelFecha').textContent = lote.fechaInicio || '-';
+
+  const conDatos = document.getElementById('panelConDatos');
+  const sinDatos = document.getElementById('panelSinDatos');
+
+  if(!lote.entradas || lote.entradas.length === 0){
+    conDatos.style.display = 'none';
+    sinDatos.style.display = 'block';
+    return;
+  }
+  conDatos.style.display = 'block';
+  sinDatos.style.display = 'none';
+
+  const entradas = [...lote.entradas].sort((a,b)=> a.fecha.localeCompare(b.fecha));
+  const ultima = entradas[entradas.length-1];
+  const ods = entradas.map(e=>parseFloat(e.od)).filter(n=>!isNaN(n));
+  const phs = entradas.map(e=>parseFloat(e.ph)).filter(n=>!isNaN(n));
+  const avg = arr => arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length) : 0;
+
+  const stats = [
+    {label:'Última medición', value: ultima.fecha},
+    {label:'pH actual', value: ultima.ph},
+    {label:'Temp. actual', value: ultima.temp + ' °C'},
+    {label:'OD680 actual', value: ultima.od},
+    {label:'Registros totales', value: entradas.length},
+    {label:'pH promedio', value: avg(phs).toFixed(2)},
+  ];
+  const grid = document.getElementById('statsGrid');
+  grid.innerHTML = stats.map(s => `<div class="stat"><div class="label">${s.label}</div><div class="value">${s.value}</div></div>`).join('');
+
+  drawChart(entradas);
+}
+
+function drawChart(entradas){
+  const canvas = document.getElementById('chartCanvas');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth || canvas.parentElement.clientWidth;
+  const h = 220;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0,0,w,h);
+
+  const vals = entradas.map(e=>parseFloat(e.od)).filter(n=>!isNaN(n));
+  if(vals.length === 0) return;
+  const padding = {top:14, right:16, bottom:28, left:44};
+  const chartW = w - padding.left - padding.right;
+  const chartH = h - padding.top - padding.bottom;
+  const min = Math.min(...vals);
+  const max = Math.max(...vals);
+  const range = (max - min) || 1;
+
+  // axes
+  ctx.strokeStyle = '#e3e7ed';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padding.left, padding.top);
+  ctx.lineTo(padding.left, padding.top + chartH);
+  ctx.lineTo(padding.left + chartW, padding.top + chartH);
+  ctx.stroke();
+
+  ctx.fillStyle = '#66768a';
+  ctx.font = '11px -apple-system, sans-serif';
+  ctx.fillText(max.toFixed(2), 4, padding.top + 6);
+  ctx.fillText(min.toFixed(2), 4, padding.top + chartH);
+
+  // line
+  ctx.strokeStyle = '#1f8c5a';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  vals.forEach((v,i)=>{
+    const x = padding.left + (vals.length === 1 ? chartW/2 : (i/(vals.length-1)) * chartW);
+    const y = padding.top + chartH - ((v - min)/range) * chartH;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+
+  // points
+  ctx.fillStyle = '#1f8c5a';
+  vals.forEach((v,i)=>{
+    const x = padding.left + (vals.length === 1 ? chartW/2 : (i/(vals.length-1)) * chartW);
+    const y = padding.top + chartH - ((v - min)/range) * chartH;
+    ctx.beginPath();
+    ctx.arc(x,y,3.5,0,Math.PI*2);
+    ctx.fill();
+  });
+
+  // x labels (first / last)
+  ctx.fillStyle = '#66768a';
+  ctx.fillText(entradas[0].fecha, padding.left, h - 8);
+  const lastLabel = entradas[entradas.length-1].fecha;
+  const lw = ctx.measureText(lastLabel).width;
+  ctx.fillText(lastLabel, padding.left + chartW - lw, h - 8);
+}
+
+// ---------- Ingresar Datos ----------
+document.getElementById('fFecha').value = todayStr();
+document.getElementById('formDatos').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const lote = getLoteActivo();
+  const entrada = {
+    id: uid('e'),
+    fecha: document.getElementById('fFecha').value,
+    ph: document.getElementById('fPh').value,
+    temp: document.getElementById('fTemp').value,
+    od: document.getElementById('fOd').value,
+    sal: document.getElementById('fSal').value,
+    o2: document.getElementById('fO2').value,
+    notas: document.getElementById('fNotas').value
+  };
+  lote.entradas.push(entrada);
+  saveData(DATA);
+  e.target.reset();
+  document.getElementById('fFecha').value = todayStr();
+  showToast('Registro guardado');
+  goTo('panel');
+});
+
+// ---------- Nuevo Lote ----------
+document.getElementById('lFecha').value = todayStr();
+document.getElementById('formLote').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const lote = {
+    id: uid('lote'),
+    nombre: document.getElementById('lNombre').value,
+    especie: document.getElementById('lEspecie').value,
+    fechaInicio: document.getElementById('lFecha').value,
+    volumen: document.getElementById('lVolumen').value,
+    notas: document.getElementById('lNotas').value,
+    entradas: []
+  };
+  DATA.lotes.push(lote);
+  DATA.loteActivoId = lote.id;
+  saveData(DATA);
+  e.target.reset();
+  document.getElementById('lFecha').value = todayStr();
+  showToast('Lote creado');
+  goTo('panel');
+});
+
+function renderLoteList(){
+  const el = document.getElementById('loteList');
+  if(DATA.lotes.length <= 1){ el.innerHTML=''; return; }
+  el.innerHTML = '<h4 style="font-size:13px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em;margin:8px 0 12px;">Lotes existentes</h4>' +
+    DATA.lotes.map(l => `
+      <div class="lote-row">
+        <div class="info"><b>${escapeHtml(l.nombre)}</b><span>${escapeHtml(l.especie)} · desde ${l.fechaInicio}</span></div>
+        <button class="badge-del" onclick="eliminarLote('${l.id}')">Eliminar</button>
+      </div>
+    `).join('');
+}
+
+function eliminarLote(id){
+  if(DATA.lotes.length <= 1){ showToast('Debe existir al menos un lote'); return; }
+  if(!confirm('¿Eliminar este lote y todos sus registros?')) return;
+  DATA.lotes = DATA.lotes.filter(l => l.id !== id);
+  if(DATA.loteActivoId === id) DATA.loteActivoId = DATA.lotes[0].id;
+  saveData(DATA);
+  renderAll();
+}
+
+// ---------- Historial ----------
+function renderHistorial(){
+  const lote = getLoteActivo();
+  const body = document.getElementById('historialBody');
+  const conDatos = document.getElementById('historialConDatos');
+  const sinDatos = document.getElementById('historialSinDatos');
+  if(!lote.entradas || lote.entradas.length === 0){
+    conDatos.style.display = 'none';
+    sinDatos.style.display = 'block';
+    return;
+  }
+  conDatos.style.display = 'block';
+  sinDatos.style.display = 'none';
+  const entradas = [...lote.entradas].sort((a,b)=> b.fecha.localeCompare(a.fecha));
+  body.innerHTML = entradas.map(e => `
+    <tr>
+      <td>${e.fecha}</td>
+      <td>${e.ph}</td>
+      <td>${e.temp}</td>
+      <td>${e.od}</td>
+      <td>${e.sal || '-'}</td>
+      <td>${e.o2 || '-'}</td>
+      <td>${escapeHtml(e.notas || '-')}</td>
+      <td><button class="badge-del" onclick="eliminarEntrada('${e.id}')">Eliminar</button></td>
+    </tr>
+  `).join('');
+}
+
+function eliminarEntrada(id){
+  const lote = getLoteActivo();
+  lote.entradas = lote.entradas.filter(e => e.id !== id);
+  saveData(DATA);
+  renderAll();
+}
+
+// ---------- Informe Ejecutivo ----------
+function renderInforme(){
+  const lote = getLoteActivo();
+  const el = document.getElementById('informeContenido');
+  if(!lote.entradas || lote.entradas.length === 0){
+    el.innerHTML = '<div class="empty-state"><p>No hay suficientes datos para generar un informe. Ingresa mediciones primero.</p></div>';
+    return;
+  }
+  const entradas = [...lote.entradas].sort((a,b)=> a.fecha.localeCompare(b.fecha));
+  const nums = key => entradas.map(e=>parseFloat(e[key])).filter(n=>!isNaN(n));
+  const avg = arr => arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length) : 0;
+  const ods = nums('od'), phs = nums('ph'), temps = nums('temp');
+  const primerOd = ods[0], ultimoOd = ods[ods.length-1];
+  const crecimiento = ultimoOd - primerOd;
+  const tendencia = crecimiento > 0 ? 'creciente' : (crecimiento < 0 ? 'decreciente' : 'estable');
+  const dias = Math.max(1, Math.round((new Date(entradas[entradas.length-1].fecha) - new Date(lote.fechaInicio)) / 86400000));
+
+  const texto =
+`Lote: ${lote.nombre}
+Especie cultivada: ${lote.especie}
+Fecha de inicio: ${lote.fechaInicio}
+Duración del experimento: ${dias} día(s)
+Registros totales: ${entradas.length}
+
+pH promedio: ${avg(phs).toFixed(2)} (mín ${Math.min(...phs).toFixed(2)}, máx ${Math.max(...phs).toFixed(2)})
+Temperatura promedio: ${avg(temps).toFixed(1)} °C (mín ${Math.min(...temps).toFixed(1)}, máx ${Math.max(...temps).toFixed(1)})
+Densidad óptica (OD680): inicial ${primerOd.toFixed(3)} → actual ${ultimoOd.toFixed(3)}
+Tendencia de crecimiento: ${tendencia} (Δ ${crecimiento.toFixed(3)})
+
+Notas del lote: ${lote.notas || '(sin notas)'}`;
+
+  el.innerHTML = `<div class="report-block"><h4>Resumen del experimento</h4><div class="report-text">${escapeHtml(texto)}</div></div>`;
+  el.dataset.raw = texto;
+}
+
+function descargarInforme(){
+  const el = document.getElementById('informeContenido');
+  const texto = el.dataset.raw;
+  if(!texto){ showToast('Genera el informe primero (sin datos aún)!'); return; }
+  const lote = getLoteActivo();
+  const blob = new Blob([texto], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `informe-${lote.nombre.replace(/\s+/g,'_')}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ---------- Ingresar Datos label ----------
+function renderIngresarHeader(){
+  document.getElementById('ingresarLoteNombre').textContent = getLoteActivo().nombre;
+}
+
+function renderAll(){
+  renderLoteSelector();
+  renderPanel();
+  renderHistorial();
+  renderInforme();
+  renderIngresarHeader();
+  renderLoteList();
+}
+
+renderAll();
+window.addEventListener('resize', renderPanel);
+</script>
+</body>
+</html>
