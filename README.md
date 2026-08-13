@@ -3,7 +3,7 @@ To use this script as an app you must do the following, after opening this link:
 
 ## Phones:
 ### In Chrome from your Android device:
-  Open the link, touch the menu (⋮), it should display an option that says 'Add to home screen' or 'Install app'.
+  Open the link, touch the menu (⋮), it should display the option 'Add to home screen' or 'Install app'.
 
 ### In Chrome from your iPhone:
   Open the link, click on 'Share', 'View More' → 'Add to Home Screen'.
