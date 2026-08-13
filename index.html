@@ -89,8 +89,10 @@
     color:#8494a8;
     margin-bottom:8px;
   }
+  .lote-select-row{display:flex;gap:6px;}
   select#loteSelector{
-    width:100%;
+    flex:1;
+    min-width:0;
     background:var(--navy-2);
     color:#fff;
     border:1px solid rgba(255,255,255,0.12);
@@ -98,6 +100,17 @@
     padding:10px 10px;
     font-size:14px;
   }
+  .icon-del-btn{
+    flex-shrink:0;
+    width:38px;
+    background:var(--navy-2);
+    color:#e3a8a0;
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+  }
+  .icon-del-btn:hover{background:#3a1f1f;color:#fff;}
   .main{
     flex:1;
     padding:32px 40px;
@@ -123,6 +136,17 @@
   h2{font-size:20px;margin:0 0 4px 0;}
   .subtitle{color:var(--muted);font-size:14.5px;}
   .subtitle b{color:var(--green-dark);font-style:italic;}
+  .link-edit{
+    background:none;
+    border:none;
+    color:var(--green-dark);
+    font-size:12.5px;
+    cursor:pointer;
+    font-weight:600;
+    padding:0;
+    margin-left:6px;
+  }
+  .link-edit:hover{text-decoration:underline;}
   .pill{
     background:var(--bg);
     border-radius:10px;
@@ -291,7 +315,10 @@
     </nav>
     <div class="sidebar-footer">
       <label>Experimento activo</label>
-      <select id="loteSelector"></select>
+      <div class="lote-select-row">
+        <select id="loteSelector"></select>
+        <button class="icon-del-btn" id="btnEliminarLoteActivo" title="Eliminar experimento activo" type="button">🗑</button>
+      </div>
     </div>
   </aside>
 
@@ -303,7 +330,7 @@
         <div class="header-row">
           <div>
             <h1 id="panelTitulo">Panel de Control</h1>
-            <div class="subtitle">Especie cultivada: <b id="panelEspecie">-</b></div>
+            <div class="subtitle">Especie cultivada: <b id="panelEspecie">-</b> <button class="link-edit" id="btnEditarEspecie" type="button" title="Editar especie cultivada">✎ Editar</button></div>
           </div>
           <div class="pill">Fecha de Inicio: <b id="panelFecha">-</b></div>
         </div>
@@ -411,6 +438,7 @@
       <div class="card">
         <div class="header-row">
           <h2>Historial</h2>
+          <button class="btn secondary" onclick="exportarCSV()">Exportar CSV</button>
         </div>
         <div id="historialConDatos">
           <table>
@@ -521,6 +549,9 @@ document.getElementById('loteSelector').addEventListener('change', (e)=>{
   saveData(DATA);
   renderAll();
 });
+document.getElementById('btnEliminarLoteActivo').addEventListener('click', ()=>{
+  eliminarLote(DATA.loteActivoId);
+});
 
 // ---------- Panel de Control ----------
 function renderPanel(){
@@ -626,6 +657,18 @@ function drawChart(entradas){
   ctx.fillText(lastLabel, padding.left + chartW - lw, h - 8);
 }
 
+document.getElementById('btnEditarEspecie').addEventListener('click', ()=>{
+  const lote = getLoteActivo();
+  const nueva = prompt('Nuevo nombre de la especie cultivada:', lote.especie || '');
+  if(nueva === null) return;
+  const trimmed = nueva.trim();
+  if(!trimmed){ showToast('El nombre no puede estar vacío'); return; }
+  lote.especie = trimmed;
+  saveData(DATA);
+  renderAll();
+  showToast('Especie actualizada');
+});
+
 // ---------- Ingresar Datos ----------
 document.getElementById('fFecha').value = todayStr();
 document.getElementById('formDatos').addEventListener('submit', (e)=>{
@@ -727,6 +770,27 @@ function eliminarEntrada(id){
   renderAll();
 }
 
+function exportarCSV(){
+  const lote = getLoteActivo();
+  if(!lote.entradas || lote.entradas.length === 0){ showToast('No hay datos para exportar'); return; }
+  const headers = ['Fecha','pH','Temperatura (°C)','OD680','Salinidad (ppt)','Oxígeno disuelto (mg/L)','Notas'];
+  const escapeCsv = v => {
+    const s = (v === undefined || v === null) ? '' : String(v);
+    if(/[",\n]/.test(s)) return '"' + s.replace(/"/g,'""') + '"';
+    return s;
+  };
+  const entradas = [...lote.entradas].sort((a,b)=> a.fecha.localeCompare(b.fecha));
+  const rows = entradas.map(e => [e.fecha, e.ph, e.temp, e.od, e.sal, e.o2, e.notas].map(escapeCsv).join(','));
+  const csv = '﻿' + [headers.join(','), ...rows].join('\r\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `datos-${lote.nombre.replace(/\s+/g,'_')}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 // ---------- Informe Ejecutivo ----------
 function renderInforme(){
   const lote = getLoteActivo();
@@ -765,7 +829,7 @@ Notas del lote: ${lote.notas || '(sin notas)'}`;
 function descargarInforme(){
   const el = document.getElementById('informeContenido');
   const texto = el.dataset.raw;
-  if(!texto){ showToast('Genera el informe primero (sin datos aún)!'); return; }
+  if(!texto){ showToast('Genera el informe primero (sin datos aún)'); return; }
   const lote = getLoteActivo();
   const blob = new Blob([texto], {type:'text/plain'});
   const url = URL.createObjectURL(blob);
