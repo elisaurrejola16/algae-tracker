@@ -243,6 +243,28 @@
   .axis-label-y.right{order:2;padding-top:20px;padding-bottom:0;}
   .chart-canvas-wrap{flex:1;min-width:0;}
   .chart-xlabel{text-align:right;font-size:10.5px;color:var(--muted);margin-top:2px;}
+  canvas{cursor:crosshair;}
+  .chart-tooltip{
+    position:fixed;
+    pointer-events:none;
+    background:var(--navy);
+    color:#fff;
+    padding:10px 13px;
+    border-radius:9px;
+    font-size:12.5px;
+    box-shadow:0 8px 20px rgba(15,28,46,0.28);
+    opacity:0;
+    transform:translateY(4px);
+    transition:opacity .12s ease, transform .12s ease;
+    z-index:80;
+    max-width:240px;
+  }
+  .chart-tooltip.show{opacity:1;transform:translateY(0);}
+  .chart-tooltip .tt-title{font-weight:700;font-size:12px;color:#9fb0c4;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.12);}
+  .chart-tooltip .tt-row{display:flex;align-items:center;gap:7px;padding:2px 0;white-space:nowrap;}
+  .chart-tooltip .tt-row span{flex:1;color:#dbe2ea;}
+  .chart-tooltip .tt-row b{font-weight:700;}
+  .chart-tooltip .tt-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0;}
 
   /* ---- Forms ---- */
   form{max-width:560px;}
@@ -765,8 +787,9 @@ function legendHtml(series){
   return series.map(s => `<span>${s.dashed ? `<span class="legend-dash" style="color:${s.color}"></span>` : `<span class="legend-dot" style="background:${s.color}"></span>`}${escapeHtml(s.name)}</span>`).join('');
 }
 
-function drawLineChart(canvas, cfg){
+function drawLineChart(canvas, cfg, hoverIndex){
   if(!canvas) return;
+  canvas._chartCfg = cfg;
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
   const w = canvas.parentElement.clientWidth || canvas.clientWidth || 300;
@@ -884,13 +907,94 @@ function drawLineChart(canvas, cfg){
       const v = s.data[i];
       if(v === null || v === undefined || isNaN(v)) return;
       const px = xToPx(x), py = yToPx(v);
+      const isHover = i === hoverIndex;
       ctx.beginPath();
-      ctx.arc(px,py,3.2,0,Math.PI*2);
+      ctx.arc(px,py, isHover ? 5 : 3.2, 0, Math.PI*2);
       ctx.fill();
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = isHover ? 2 : 1.5;
       ctx.strokeStyle = '#fff';
       ctx.stroke();
     });
+  });
+
+  // crosshair vertical line at hovered point
+  if(hoverIndex !== undefined && hoverIndex !== null && xVals[hoverIndex] !== undefined){
+    const px = xToPx(xVals[hoverIndex]);
+    ctx.strokeStyle = '#c7d0dc';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath();
+    ctx.moveTo(px, padding.top);
+    ctx.lineTo(px, padding.top + chartH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // store layout for tooltip hit-testing
+  canvas._tooltipData = {
+    xVals,
+    series: cfg.series,
+    pxPositions: xVals.map(x => xToPx(x)),
+    chartLeft: padding.left,
+    chartRight: padding.left + chartW
+  };
+  bindChartTooltip(canvas);
+}
+
+// ---------- Tooltip interactivo de gráficos ----------
+function ensureChartTooltipEl(){
+  let t = document.getElementById('chartTooltip');
+  if(!t){
+    t = document.createElement('div');
+    t.id = 'chartTooltip';
+    t.className = 'chart-tooltip';
+    document.body.appendChild(t);
+  }
+  return t;
+}
+
+function bindChartTooltip(canvas){
+  if(canvas.dataset.ttBound) return;
+  canvas.dataset.ttBound = '1';
+  const tip = ensureChartTooltipEl();
+
+  function findNearestIndex(mouseX){
+    const data = canvas._tooltipData;
+    if(!data || !data.pxPositions.length) return -1;
+    let bestIdx = 0, bestDist = Infinity;
+    data.pxPositions.forEach((px,i)=>{
+      const d = Math.abs(px - mouseX);
+      if(d < bestDist){ bestDist = d; bestIdx = i; }
+    });
+    return bestIdx;
+  }
+
+  canvas.addEventListener('mousemove', (e)=>{
+    const data = canvas._tooltipData;
+    if(!data) return;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const idx = findNearestIndex(mouseX);
+    if(idx < 0) return;
+
+    const dia = data.xVals[idx];
+    let html = `<div class="tt-title">Día ${escapeHtml(dia)}</div>`;
+    data.series.forEach(s=>{
+      const v = s.data[idx];
+      const vStr = (v === null || v === undefined || isNaN(v)) ? '—' : (s.fmt ? s.fmt(v) : Number(v).toFixed(2));
+      html += `<div class="tt-row"><span class="tt-dot" style="background:${s.color}"></span><span>${escapeHtml(s.name)}</span><b>${vStr}</b></div>`;
+    });
+    tip.innerHTML = html;
+    tip.style.left = (e.clientX + 14) + 'px';
+    tip.style.top = (e.clientY + 14) + 'px';
+    tip.classList.add('show');
+
+    if(canvas._chartCfg) drawLineChart(canvas, canvas._chartCfg, idx);
+  });
+
+  canvas.addEventListener('mouseleave', ()=>{
+    tip.classList.remove('show');
+    if(canvas._chartCfg) drawLineChart(canvas, canvas._chartCfg);
   });
 }
 
@@ -966,7 +1070,7 @@ function renderPanel(){
 
   drawLineChart(document.getElementById('chartCelulas'), {
     xVals: dias,
-    series: [{ name:'Células/mL', data:celulas, color:'#1f8c5a' }],
+    series: [{ name:'Células/mL', data:celulas, color:'#1f8c5a', fmt: v => fmtInt(v) + ' cel/mL' }],
     yLeftFormat: fmtCompactAxis
   });
   document.getElementById('legendCelulas').innerHTML = legendHtml([{ name:'Células/mL', color:'#1f8c5a' }]);
@@ -974,8 +1078,8 @@ function renderPanel(){
   drawLineChart(document.getElementById('chartBiomasa'), {
     xVals: dias,
     series: [
-      { name:'Biomasa (g/L)', data:biomasa, color:'#2f6fd6' },
-      { name:'Productividad', data:productividad, color:'#1f8c5a', dashed:true, axis:'right' }
+      { name:'Biomasa (g/L)', data:biomasa, color:'#2f6fd6', fmt: v => v.toFixed(3) + ' g/L' },
+      { name:'Productividad', data:productividad, color:'#1f8c5a', dashed:true, axis:'right', fmt: v => v.toFixed(3) + ' g/L/d' }
     ],
     yLeftFormat: v => v.toFixed(2),
     yRightFormat: v => v.toFixed(3)
@@ -988,8 +1092,8 @@ function renderPanel(){
   drawLineChart(document.getElementById('chartPhTemp'), {
     xVals: dias,
     series: [
-      { name:'Nivel de pH', data:phVals, color:'#7a5fd6' },
-      { name:'Temperatura (°C)', data:tempVals, color:'#e0a030', axis:'right' }
+      { name:'Nivel de pH', data:phVals, color:'#7a5fd6', fmt: v => v.toFixed(2) },
+      { name:'Temperatura (°C)', data:tempVals, color:'#e0a030', axis:'right', fmt: v => v.toFixed(1) + ' °C' }
     ],
     yLeftFormat: v => v.toFixed(1),
     yRightFormat: v => v.toFixed(0),
@@ -1003,7 +1107,7 @@ function renderPanel(){
 
   drawLineChart(document.getElementById('chartDO'), {
     xVals: dias,
-    series: [{ name:'Densidad Óptica (DO)', data:doVals, color:'#29a3c9' }],
+    series: [{ name:'Densidad Óptica (DO)', data:doVals, color:'#29a3c9', fmt: v => v.toFixed(3) }],
     yLeftFormat: v => v.toFixed(2)
   });
   document.getElementById('legendDO').innerHTML = legendHtml([{ name:'Densidad Óptica (DO)', color:'#29a3c9' }]);
